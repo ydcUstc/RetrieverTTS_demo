@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="RetrieverTTS: Modeling Decomposed Factors for Text-Based Speech Insertion.">
+  <meta name="keywords" content="speech editing, text-based speech insertion, zero-shot voice adaptation, speech synthesis">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RetrieverTTS: Modeling Decomposed Factors for Text-Based Speech Insertion</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+
+
+
+  </script>
+  <style>
+  .hr {width: 100%; height: 1px; margin: 48px 0; background-color: #d6dbdf;}
+  </style>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">RetrieverTTS: Modeling Decomposed Factors for Text-Based Speech Insertion</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://ydcustc.github.io">Dacheng Yin</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://www.microsoft.com/en-us/research/people/chutan/publications/">Chuanxin Tang</a><sup>2</sup>,</span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=dIJFz4UAAAAJ&hl=zh-CN&oi=ao">Yanqing Liu</a><sup>3</sup>,
+            </span>
+            <span class="author-block">
+              <a href="">Xiaoqiang Wang</a><sup>3</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.microsoft.com/en-us/research/people/zhiyzh/publications/">Zhiyuan Zhao</a><sup>2</sup>,</span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=QWemjjQAAAAJ&hl=zh-CN&oi=ao">Yucheng Zhao</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="http://staff.ustc.edu.cn/~zwxiong/">Zhiwei Xiong</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.microsoft.com/en-us/research/people/szhao/publications/">Sheng Zhao</a><sup>3</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.microsoft.com/en-us/research/people/cluo/">Chong Luo</a><sup>2</sup>,
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>University of Science and Technology of China,</span>
+            <span class="author-block"><sup>2</sup>Microsoft Research Asia,</span>
+            <span class="author-block"><sup>3</sup>Microsoft Azure Speech</span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><strong>InterSpeech 2022</strong></span>
+          </div>
+
+
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--<section class="hero is-light">-->
+<!--  <div class="container is-max-desktop">-->
+<!--    <div class="hero-body">-->
+<!--      <video id="teaser_audio" autoplay muted loop height="100%">-->
+<!--        <source src="videos/audio.mp4"-->
+<!--                type="video/mp4">-->
+<!--      </video>-->
+
+<!--      <div style="padding: 12px;"></div>-->
+
+<!--      <video id="teaser_image" autoplay muted loop height="100%">-->
+<!--        <source src="videos/image.mp4"-->
+<!--                type="video/mp4">-->
+<!--      </video>-->
+
+<!--      <h2 class="subtitle has-text-centered">-->
+<!--        <strong>Retriever</strong> is a <i>modal-agnostic</i> content-style disentanglement framework.-->
+<!--      </h2>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</section>-->
+
+
+<section class="section">
+  <div class="container">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-two-thirds">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="hr"></div>
+        <div class="content has-text-justified">
+          <p>
+            This paper proposes a new paradigm for the text-based speech
+            insertion task that enables long insertion and full sentence generation. It is achieved by explicitly decomposing local and
+            global factors and controlling them separately. Technically, we
+            guarantee high speaker similarity by extracting multiple global
+            factor tokens and introducing a link-attention mechanism that
+            fully models and utilizes global factor information, including
+            timbre and style. By introducing a prosody smoothing task,
+            we model the local factors like prosody to be context-aware
+            and achieve satisfactory prosody continuity. We guarantee high
+            voice quality with an adversarial training stage. In the subjective test, our method achieves state-of-the-art in both naturalness and similarity.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-two-thirds">
+        <h2 class="title is-3">Method</h2>
+        <div class="hr"></div>
+        <div class="content has-text-justified">
+          <p>
+            The proposed framework "<strong>RetrieverTTS</strong>" is composed of four parts: phoneme encoder, variance adaptor, mel decoder and global factor encoder. The extracted global factors (style, timbre) are represented by m tokens. For style injection, the first token is added to the input of the phoneme encoder. For timbre injection, all the tokens are injected into mel decoder with link attention mechanism.
+          </p>
+          <p>
+              We add a prosody smoothing task during training. In 50% training samples, we add partially masked ground-truth prosody embeddings on the encoded phonemes before feeding them into the variance adaptor. The masked embeddings are filled with zero. An additional adversarial training stage is introduced to improve the speech quality.
+          </p>
+          <div class="column">
+            <img src="RetrieverTTS_arch.png" />
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+    <h3 class="title is-3">Audio Samples</h3></div>
+    <div class="hr"></div>
+    <h4 class="title is-4">Testing Condition</h4>
+    <div style="padding: -1px;"></div>
+        <ul style="list-style-type:disc">
+          <li style="margin-left: 60px;">All the samples in this demo page are spoken by speakers that are <b><i>out of the training data</i></b>.</li>
+          <li style="margin-left: 60px;">Our model <b><i>does not</i></b> apply any finetuning on these unseen speakers' voice.</li>
+        </ul>
+    <div class="hr"></div>
+<!--    <div style="padding: 18px;"></div>-->
+
+    <h4 class="title is-4">Long Insertion Examples</h4>
+    <div style="padding: 4px;"></div>
+
+    <h5 class="title is-5">Example1</h5>
+      <div class="panel-body" style="height: 130px; overflow-y:hidden">
+          <div style="border: 1px  #000000; width: 90%; margin: 0 auto;">
+                <span>
+                    <table>
+                        <thead><tr>
+                            <td style="width:70%"><b>[Original Sentence]</b>: They are chiefly formed from combinations of the impressions made in childhood.</td>
+                            <td style="text-align: center"><audio controls="controls"><source src="./EditingExamples/media7.mp3" autoplay="">Your browser does not support the audio element.</audio></td>
+                        </tr></thead>
+                        <tbody><tr>
+                            <td style="width:70%"><b>[Edited Sentence]</b>: They are chiefly formed from combinations <font color="red">under his success</font> of the impressions made in childhood.</td>
+                            <td style="width:70%"><audio controls="controls"><source src="./EditingExamples/media8.mp3" autoplay="">Your browser does not support the audio element.</audio></td>
+                        </tr></tbody>
+                    </table>
+                </span>
+          </div>
+      </div>
+
+      <h5 class="title is-5">Example2</h5>
+      <div class="panel-body" style="height: 210px; overflow-y:hidden">
+          <div style="border: 1px  #000000; width: 90%; margin: 0 auto;">
+                <span>
+                    <table>
+                        <thead><tr>
+                            <td style="width:70%"><b>[Original Sentence]</b>: Is the under side of civilization any less important than the upper side merely because it is deeper and more sombre?</td>
+                            <th style="text-align: center"><audio controls="controls"><source src="./EditingExamples/media4.mp3" autoplay="">Your browser does not support the audio element.</audio></th>
+                        </tr></thead>
+                        <tbody><tr>
+                            <td style="width:70%"><b>[Edited Sentence 1]</b>: Is the under side of civilization any less important than the upper side <font color="red">of this civilization</font> merely because it is deeper and more sombre?</td>
+                            <td style="width:70%"><audio controls="controls"><source src="./EditingExamples/media5.mp3" autoplay="">Your browser does not support the audio element.</audio></td>
+                        </tr></tbody>
+                        <tbody><tr>
+                            <td style="width:70%"><b>[Edited Sentence 2]</b>: Is the under side of civilization any less important than the upper side <font color="red">of the very same civilization</font> merely because it is deeper and more sombre?</td>
+                            <td style="width:70%"><audio controls="controls"><source src="./EditingExamples/media6.mp3" autoplay="">Your browser does not support the audio element.</audio></td>
+                        </tr></tbody>
+                    </table>
+                </span>
+          </div>
+      </div>
+
+    <div class="hr"></div>
+<!--    <div style="padding: 12px;"></div>-->
+
+    <h4 class="title is-4">Full Sentence Generation Examples</h4>
+    <div style="padding: 6px;"></div>
+
+    <h5 class="title is-5">Example1</h5>
+      <div class="panel-body" style="height: 210px; overflow-y:hidden">
+          <div style="border: 1px  #000000; width: 90%; margin: 0 auto;">
+                <span>
+                    <table>
+                        <thead><tr>
+                            <td style="width:70%"><b>[Reference Sentence]</b>: Mr. T. himself had been much abroad, both on business and to see the great continental galleries of paintings.</td>
+                            <td style="text-align: center"><audio controls="controls"><source src=./GenerationExamples/00005/reference.mp3 autoplay="">Your browser does not support the audio element.</audio></td>
+                        </tr></thead>
+                        <tbody><tr>
+                            <td style="width:70%"><b>[Generated Sentence]</b>: He expended quite as much in my education as he could afford in justice to the rest.</td>
+                            <td style="width:70%"><audio controls="controls"><source src="./GenerationExamples/00005/gen.mp3" autoplay="">Your browser does not support the audio element.</audio></td>
+                        </tr></tbody>
+                        <tbody><tr>
+                            <td style="width:70%"><b>[Ground-Truth Recording]</b>: He expended quite as much in my education as he could afford in justice to the rest.</td>
+                            <td style="width:70%"><audio controls="controls"><source src="./GenerationExamples/00005/gt.mp3" autoplay="">Your browser does not support the audio element.</audio></td>
+                        </tr></tbody>
+                    </table>
+                </span>
+          </div>
+      </div>
+
+      <h5 class="title is-5">Example2</h5>
+      <div class="panel-body" style="height: 210px; overflow-y:hidden">
+          <div style="border: 1px  #000000; width: 90%; margin: 0 auto;">
+                <span>
+                    <table>
+                        <thead><tr>
+                            <td style="width:70%"><b>[Reference Sentence]</b>: Sheriff Jones made several visits unmolested on their part, and without any display of writs or demand for the surrender of alleged offenders on his own.</td>
+                            <td style="text-align: center"><audio controls="controls"><source src=./GenerationExamples/00011/reference.mp3 autoplay="">Your browser does not support the audio element.</audio></td>
+                        </tr></thead>
+                        <tbody><tr>
+                            <td style="width:70%"><b>[Generated Sentence]</b>: Meanwhile a sober second thought had come to Governor Shannon.</td>
+                            <td style="width:70%"><audio controls="controls"><source src="./GenerationExamples/00011/gen.mp3" autoplay="">Your browser does not support the audio element.</audio></td>
+                        </tr></tbody>
+                        <tbody><tr>
+                            <td style="width:70%"><b>[Ground-Truth Recording]</b>: Meanwhile a sober second thought had come to Governor Shannon.</td>
+                            <td style="width:70%"><audio controls="controls"><source src="./GenerationExamples/00011/gt.mp3" autoplay="">Your browser does not support the audio element.</audio></td>
+                        </tr></tbody>
+                    </table>
+                </span>
+          </div>
+      </div>
+    <div class="hr"></div>
+<!--    <div style="padding: 12px;"></div>-->
+
+    <h4 class="title is-4">System comparison</h4>
+    <div style="padding: 6px;"></div>
+    <h5 class="title is-5">Similarity Test</h5>
+      <div class="panel-body" style="height: 300px; overflow-y:hidden">
+          <div style="border: 1px  #000000; width: 90%; margin: 0 auto;">
+                <span>
+                    <p><b>[Text to be generated]</b>: He spoke French perfectly, I have been told, when need was; but delighted usually in talking the broadest Yorkshire.</p>
+                    <div style="padding: 6px;"></div>
+                    <table>
+                        <thead><tr>
+                            <th style="text-align: center">Reference Voice</th>
+                            <th style="text-align: center">RetrieverTTS</th>
+                            <th style="text-align: center">Meta-StyleSpeech</th>
+                        </tr></thead>
+                        <tbody><tr>
+                            <td style="text-align: center"><audio controls="controls"><source src="./Similarity/00025/reference.mp3" autoplay="">Your browser does not support the audio element.</audio></td>
+                            <td style="text-align: center"><audio controls="controls"><source src="./Similarity/00025/ours.mp3" autoplay="">Your browser does not support the audio element.</audio></td>
+                            <td style="text-align: center"><audio controls="controls"><source src="./Similarity/00025/metastylespeech.mp3" autoplay="">Your browser does not support the audio element.</audio></td>
+                        </tr></tbody>
+                    </table>
+                    <div style="padding: 12px;"></div>
+                    <p><b>[Text to be generated]</b>: Gradually I knew I was mastering him--then all was blank.</p>
+                    <div style="padding: 6px;"></div>
+                    <table>
+                        <thead><tr>
+                            <th style="text-align: center">Reference Voice</th>
+                            <th style="text-align: center">RetrieverTTS</th>
+                            <th style="text-align: center">Meta-StyleSpeech</th>
+                        </tr></thead>
+                        <tbody><tr>
+                            <td style="text-align: center"><audio controls="controls"><source src="./Similarity/00019/reference.mp3" autoplay="">Your browser does not support the audio element.</audio></td>
+                            <td style="text-align: center"><audio controls="controls"><source src="./Similarity/00019/ours.mp3" autoplay="">Your browser does not support the audio element.</audio></td>
+                            <td style="text-align: center"><audio controls="controls"><source src="./Similarity/00019/metastylespeech.mp3" autoplay="">Your browser does not support the audio element.</audio></td>
+                        </tr></tbody>
+                    </table>
+                </span>
+          </div>
+      </div>
+    <div style="padding: 12px;"></div>
+    <h5 class="title is-5">Naturalness Test</h5>
+      <div class="panel-body" style="height: 350px; overflow-y:hidden">
+          <div style="border: 1px  #000000; width: 90%; margin: 0 auto;">
+                <span>
+                    <p><b>[Text after insertion]</b>: Recovering his recollection on the instant, <font color="red">instead of sounding an alarm</font>, which might prove fatal to himself, he remained stationary, an attentive observer of the other's motions.</p>
+			        <div style="padding: 6px;"></div>
+                    <table>
+                        <thead><tr>
+                            <th style="text-align: center">Ground Truth Recording</th>
+                            <th style="text-align: center">RetrieverTTS</th>
+                            <th style="text-align: center">Meta-StyleSpeech</th>
+                            <th style="text-align: center">C.Tang et al.</th>
+                        </tr></thead>
+                        <tbody><tr>
+                            <td style="text-align: center"><audio controls="controls"><source src="./Naturalness/00002/GT.mp3" autoplay="">Your browser does not support the audio element.</audio></td>
+                            <td style="text-align: center"><audio controls="controls"><source src="./Naturalness/00002/ours.mp3" autoplay="">Your browser does not support the audio element.</audio></td>
+                            <td style="text-align: center"><audio controls="controls"><source src="./Naturalness/00002/metastylespeech.mp3" autoplay="">Your browser does not support the audio element.</audio></td>
+                            <td style="text-align: center"><audio controls="controls"><source src="./Naturalness/00002/chuanxin.mp3" autoplay="">Your browser does not support the audio element.</audio></td>
+                        </tr></tbody>
+                    </table>
+                    <div style="padding: 12px;"></div>
+                    <p><b>[Text after insertion]</b>: Miss Taylor was soon starving for human companionship, for the <font color="red">lighter touches of life and some of its warmth</font> and laughter.</p>
+			        <div style="padding: 6px;"></div>
+                    <table>
+                        <thead><tr>
+                            <th style="text-align: center">Ground Truth Recording</th>
+                            <th style="text-align: center">RetrieverTTS</th>
+                            <th style="text-align: center">Meta-StyleSpeech</th>
+                            <th style="text-align: center">C.Tang et al.</th>
+                        </tr></thead>
+                        <tbody><tr>
+                            <td style="text-align: center"><audio controls="controls"><source src="./Naturalness/00004/GT.mp3" autoplay="">Your browser does not support the audio element.</audio></td>
+                            <td style="text-align: center"><audio controls="controls"><source src="./Naturalness/00004/ours.mp3" autoplay="">Your browser does not support the audio element.</audio></td>
+                            <td style="text-align: center"><audio controls="controls"><source src="./Naturalness/00004/metastylespeech.mp3" autoplay="">Your browser does not support the audio element.</audio></td>
+                            <td style="text-align: center"><audio controls="controls"><source src="./Naturalness/00004/chuanxin.mp3" autoplay="">Your browser does not support the audio element.</audio></td>
+                        </tr></tbody>
+                    </table>
+                </span>
+          </div>
+      </div>
+
+    <div class="hr"></div>
+    <h4 class="title is-4">Ablation Study</h4>
+      <div class="panel-body" style="height: 180px; overflow-y:hidden">
+          <div style="border: 1px  #000000; width: 90%; margin: 0 auto;">
+                <span>
+                    <p><b>[Text after insertion]</b>: He was going to leave the room--she followed him, and cried, "But, my Lord, <font color="red">how shall I</font> see again the unhappy object of my treachery?"</p>
+                    <div style="padding: 6px;"></div>
+                    <table><thead><tr>
+                        <th style="text-align: center">Ground Truth Recording</th>
+                        <th style="text-align: center">RetrieverTTS</th>
+                        <th style="text-align: center">-adv</th>
+                        <th style="text-align: center">-prosody-smooth</th>
+                        <th style="text-align: center">-retriever</th>
+                    </tr></thead>
+                    <tbody><tr>
+                        <td style="text-align: center"><audio controls="controls"><source src="./Ablation/00006/GT.mp3" autoplay="">Your browser does not support the audio element.</audio></td>
+                        <td style="text-align: center"><audio controls="controls"><source src="./Ablation/00006/full.mp3" autoplay="">Your browser does not support the audio element.</audio></td>
+                        <td style="text-align: center"><audio controls="controls"><source src="./Ablation/00006/woGAN.mp3" autoplay="">Your browser does not support the audio element.</audio></td>
+                        <td style="text-align: center"><audio controls="controls"><source src="./Ablation/00006/woProsodySmoothing.mp3" autoplay="">Your browser does not support the audio element.</audio></td>
+                        <td style="text-align: center"><audio controls="controls"><source src="./Ablation/00006/woRetriever.mp3" autoplay="">Your browser does not support the audio element.</audio></td>
+                    </tr></tbody></table>
+                </span>
+          </div>
+      </div>
+  </div>
+
+</section>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@inproceedings{yin2022retrievertts,
+  title={RetrieverTTS: Modeling Decomposed Factors for Text-Based Speech Insertion},
+  author={Yin, Dacheng and Tang, Chuanxin and Liu, Yanqing and Wang, Xiaoqiang and Zhao, Zhiyuan and Zhao, Yucheng and Xiong, Zhiwei and Zhao, Sheng and Luo, Chong}
+  booktitle={Interspeech},
+  year={2022}
+}</code></pre>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link"
+         href="">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            Correspondence to <a href="https://ydcustc.github.io/">Dacheng Yin</a>. This website template is borrowed from <a
+            href="https://github.com/nerfies/nerfies.github.io">Here</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+</body>
+</html>
